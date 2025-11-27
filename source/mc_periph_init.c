@@ -53,7 +53,7 @@ static void InitClock(void);
 static void InitUART0(void);
 static void InitAOI0(void);
 static void InitAOI1(void);
-static void InitCTIMER1(void);
+static void InitCTIMER4(void);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -433,48 +433,48 @@ static void InitOpAmps(void)
 
   /* Channel CH0 definitions */
 /* DMA0 eDMA source request. */
-#define DMA0_CH0_DMA_REQUEST kDma0RequestMuxCtimer2M0
+#define DMA0_CH0_DMA_REQUEST kDma0RequestMuxCtimer0M0
 /* Selected eDMA channel number. */
 #define DMA0_CH0_DMA_CHANNEL 0
 
   /* Channel CH1 definitions */
 /* DMA0 eDMA source request. */
-#define DMA0_CH1_DMA_REQUEST kDma0RequestMuxCtimer2M1
+#define DMA0_CH1_DMA_REQUEST kDma0RequestMuxCtimer0M1
 /* Selected eDMA channel number. */
 #define DMA0_CH1_DMA_CHANNEL 1
 
   /* Channel CH2 definitions */
 /* DMA0 eDMA source request. */
-#define DMA0_CH2_DMA_REQUEST kDma0RequestMuxCtimer3M0
+#define DMA0_CH2_DMA_REQUEST kDma0RequestMuxCtimer1M0
 /* Selected eDMA channel number. */
 #define DMA0_CH2_DMA_CHANNEL 2
 
   /* Channel CH3 definitions */
 /* DMA0 eDMA source request. */
-#define DMA0_CH3_DMA_REQUEST kDma0RequestMuxCtimer3M1
+#define DMA0_CH3_DMA_REQUEST kDma0RequestMuxCtimer1M1
 /* Selected eDMA channel number. */
 #define DMA0_CH3_DMA_CHANNEL 3
 
 /* DMA0 eDMA source request. */
-#define DMA0_CH4_DMA_REQUEST kDma0RequestMuxCtimer4M0
+#define DMA0_CH4_DMA_REQUEST kDma0RequestMuxCtimer2M0
 /* Selected eDMA channel number. */
 #define DMA0_CH4_DMA_CHANNEL 4
 
   /* Channel CH5 definitions */
 /* DMA0 eDMA source request. */
-#define DMA0_CH5_DMA_REQUEST kDma0RequestMuxCtimer4M1
+#define DMA0_CH5_DMA_REQUEST kDma0RequestMuxCtimer2M1
 /* Selected eDMA channel number. */
 #define DMA0_CH5_DMA_CHANNEL 5
 
   /* Channel CH6 definitions */
 /* DMA0 eDMA source request. */
-#define DMA0_CH6_DMA_REQUEST kDma0RequestMuxCtimer0M0
+#define DMA0_CH6_DMA_REQUEST kDma0RequestMuxCtimer3M0
 /* Selected eDMA channel number. */
 #define DMA0_CH6_DMA_CHANNEL 6
 
   /* Channel CH7 definitions */
 /* DMA0 eDMA source request. */
-#define DMA0_CH7_DMA_REQUEST kDma0RequestMuxCtimer0M1
+#define DMA0_CH7_DMA_REQUEST kDma0RequestMuxCtimer3M1
 /* Selected eDMA channel number. */
 #define DMA0_CH7_DMA_CHANNEL 7
 
@@ -1096,7 +1096,7 @@ static void InitCTIMER0(void)
 //    CTIMER0->TCR |= CTIMER_TCR_ATCEN(1);
     matchConfig.enableCounterReset = false;
     matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 5711;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.matchValue         = 5622;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
@@ -1104,7 +1104,7 @@ static void InitCTIMER0(void)
 
     matchConfig.enableCounterReset = false;
     matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 16868;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.matchValue         = 16957;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
@@ -1119,6 +1119,40 @@ static void InitCTIMER0(void)
     CTIMER_SetupMatch(CTIMER0, kCTIMER_Match_2, &matchConfig);
 }
 
+static void InitCTIMER1(void)
+{
+    ctimer_config_t config;
+    ctimer_match_config_t matchConfig;
+
+    CTIMER_GetDefaultConfig(&config);
+
+    CTIMER_Init(CTIMER1, &config);
+//    CTIMER1->TCR |= CTIMER_TCR_ATCEN(1);
+    matchConfig.enableCounterReset = false;
+    matchConfig.enableCounterStop  = false;
+    matchConfig.matchValue         = 5711;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.outControl         = kCTIMER_Output_NoAction;
+    matchConfig.outPinInitState    = true;
+    matchConfig.enableInterrupt    = false;
+    CTIMER_SetupMatch(CTIMER1, kCTIMER_Match_0, &matchConfig);
+
+    matchConfig.enableCounterReset = false;
+    matchConfig.enableCounterStop  = false;
+    matchConfig.matchValue         = 16868;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.outControl         = kCTIMER_Output_NoAction;
+    matchConfig.outPinInitState    = true;
+    matchConfig.enableInterrupt    = false;
+    CTIMER_SetupMatch(CTIMER1, kCTIMER_Match_1, &matchConfig);
+    
+    matchConfig.enableCounterReset = true;
+    matchConfig.enableCounterStop  = true;
+    matchConfig.matchValue         = CLOCK_GetCTimerClkFreq(1U) / M3_PWM_FREQ - 10;
+    matchConfig.outControl         = kCTIMER_Output_NoAction;
+    matchConfig.outPinInitState    = true;
+    matchConfig.enableInterrupt    = false;
+    CTIMER_SetupMatch(CTIMER1, kCTIMER_Match_2, &matchConfig);
+
+}
 
 static void InitCTIMER2(void)
 {
@@ -1150,7 +1184,10 @@ static void InitCTIMER2(void)
     matchConfig.matchValue         = CLOCK_GetCTimerClkFreq(2U) / M3_PWM_FREQ - 10;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
-    matchConfig.enableInterrupt    = false;
+    matchConfig.enableInterrupt    = true;
+	
+    /* Create different ctimer_callback_table array for different CTimer instance. */
+    CTIMER_RegisterCallBack(CTIMER2, &ctimer_callback_table[0], kCTIMER_SingleCallback);  
     CTIMER_SetupMatch(CTIMER2, kCTIMER_Match_2, &matchConfig);
 }
 
@@ -1163,10 +1200,10 @@ static void InitCTIMER3(void)
     CTIMER_GetDefaultConfig(&config);
 
     CTIMER_Init(CTIMER3, &config);
-//    CTIMER3->TCR |= CTIMER_TCR_ATCEN(1);
+ //   CTIMER3->TCR |= CTIMER_TCR_ATCEN(1);
     matchConfig.enableCounterReset = false;
     matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 5711;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.matchValue         = 5622;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
@@ -1174,7 +1211,7 @@ static void InitCTIMER3(void)
 
     matchConfig.enableCounterReset = false;
     matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 16868;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.matchValue         = 16957;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
@@ -1186,45 +1223,8 @@ static void InitCTIMER3(void)
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
+      
     CTIMER_SetupMatch(CTIMER3, kCTIMER_Match_2, &matchConfig);
-
-}
-
-static void InitCTIMER4(void)
-{
-    ctimer_config_t config;
-    ctimer_match_config_t matchConfig;
-
-    CTIMER_GetDefaultConfig(&config);
-
-    CTIMER_Init(CTIMER4, &config);
-//    CTIMER4->TCR |= CTIMER_TCR_ATCEN(1);
-    matchConfig.enableCounterReset = false;
-    matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 5622;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
-    matchConfig.outControl         = kCTIMER_Output_NoAction;
-    matchConfig.outPinInitState    = true;
-    matchConfig.enableInterrupt    = false;
-    CTIMER_SetupMatch(CTIMER4, kCTIMER_Match_0, &matchConfig);
-
-    matchConfig.enableCounterReset = false;
-    matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 16957;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
-    matchConfig.outControl         = kCTIMER_Output_NoAction;
-    matchConfig.outPinInitState    = true;
-    matchConfig.enableInterrupt    = false;
-    CTIMER_SetupMatch(CTIMER4, kCTIMER_Match_1, &matchConfig);
-    
-    matchConfig.enableCounterReset = true;
-    matchConfig.enableCounterStop  = true;
-    matchConfig.matchValue         = CLOCK_GetCTimerClkFreq(4U) / M3_PWM_FREQ - 10;
-    matchConfig.outControl         = kCTIMER_Output_NoAction;
-    matchConfig.outPinInitState    = true;
-    matchConfig.enableInterrupt    = true;
-    
-    /* Create different ctimer_callback_table array for different CTimer instance. */
-    CTIMER_RegisterCallBack(CTIMER4, &ctimer_callback_table[0], kCTIMER_SingleCallback);    
-    CTIMER_SetupMatch(CTIMER4, kCTIMER_Match_2, &matchConfig);
 
 }
 
@@ -1509,27 +1509,27 @@ static void InitSlowLoop(void)
     LPTMR_StartTimer(LPTMR0);
 }
 
-static void InitCTIMER1(void)
+static void InitCTIMER4(void)
 {
-    CLOCK_EnableClock(kCLOCK_GateCTIMER1);
-    RESET_PeripheralReset(kCTIMER1_RST_SHIFT_RSTn);
+    CLOCK_EnableClock(kCLOCK_GateCTIMER4);
+    RESET_PeripheralReset(kCTIMER4_RST_SHIFT_RSTn);
     
-    CLOCK_SetClockDiv(kCLOCK_DivCTIMER1, 1U);
-    CLOCK_AttachClk(kFRO_HF_to_CTIMER1);  
+    CLOCK_SetClockDiv(kCLOCK_DivCTIMER4, 1U);
+    CLOCK_AttachClk(kFRO_HF_to_CTIMER4);
     
-    CTIMER1->TCR |= CTIMER_TCR_ATCEN_MASK;
+    CTIMER4->TCR |= CTIMER_TCR_ATCEN_MASK;
     
-    CTIMER1->MR[0] = PFC_PWM_MODULO / 2 + 120;
-    CTIMER1->MR[1] = PFC_PWM_MODULO + 120;
-    CTIMER1->MR[2] = PFC_PWM_MODULO + 400U;
-    CTIMER1->MR[3] = PFC_PWM_MODULO + PFC_PWM_MODULO - 240U;    
+    CTIMER4->MR[0] = PFC_PWM_MODULO / 2 + 120;
+    CTIMER4->MR[1] = PFC_PWM_MODULO + 120;
+    CTIMER4->MR[2] = PFC_PWM_MODULO + 400U;
+    CTIMER4->MR[3] = PFC_PWM_MODULO + PFC_PWM_MODULO - 240U;
     
-    CTIMER1->MCR |= CTIMER_MCR_MR3S_MASK | CTIMER_MCR_MR2I_MASK; 
+    CTIMER4->MCR |= CTIMER_MCR_MR3S_MASK | CTIMER_MCR_MR2I_MASK;
     
-    CTIMER1->PWMC |= CTIMER_PWMC_PWMEN0_MASK | CTIMER_PWMC_PWMEN1_MASK;
+    CTIMER4->PWMC |= CTIMER_PWMC_PWMEN0_MASK | CTIMER_PWMC_PWMEN1_MASK;
     
-    NVIC_SetPriority(CTIMER1_IRQn, 4U);
-    NVIC_EnableIRQ(CTIMER1_IRQn);
+    NVIC_SetPriority(CTIMER4_IRQn, 4U);
+    NVIC_EnableIRQ(CTIMER4_IRQn);
 
 }
 
@@ -1664,8 +1664,8 @@ void InitInputmux(void)
         
     INPUTMUX_AttachSignal(INPUTMUX0, 0U, kINPUTMUX_Pwm0Sm0OutTrig0ToAdc0Trigger);
     
-    INPUTMUX_AttachSignal(INPUTMUX0, 1U, kINPUTMUX_Ctimer1M0ToAdc0Trigger);
-    INPUTMUX_AttachSignal(INPUTMUX0, 2U, kINPUTMUX_Ctimer1M1ToAdc0Trigger);
+    INPUTMUX_AttachSignal(INPUTMUX0, 1U, kINPUTMUX_Ctimer4M0ToAdc0Trigger);
+    INPUTMUX_AttachSignal(INPUTMUX0, 2U, kINPUTMUX_Ctimer4M1ToAdc0Trigger);
    
     INPUTMUX_AttachSignal(INPUTMUX0, 0U, kINPUTMUX_Pwm0Sm1OutTrig0ToAdc1Trigger);    
     INPUTMUX_AttachSignal(INPUTMUX0, 0U, kINPUTMUX_Pwm0Sm1OutTrig1ToFlexPwm1Force);
@@ -1676,10 +1676,10 @@ void InitInputmux(void)
     INPUTMUX_AttachSignal(INPUTMUX0, 0U, kINPUTMUX_Pwm0Sm3OutTrig1ToAoi0Mux);
     
     
+    INPUTMUX_AttachSignal(INPUTMUX0,0,kINPUTMUX_Pwm1Sm3OutTrig0ToTimer0Trigger);
+    INPUTMUX_AttachSignal(INPUTMUX0,0,kINPUTMUX_Pwm1Sm3OutTrig0ToTimer1Trigger);
     INPUTMUX_AttachSignal(INPUTMUX0,0,kINPUTMUX_Pwm1Sm3OutTrig0ToTimer2Trigger);
     INPUTMUX_AttachSignal(INPUTMUX0,0,kINPUTMUX_Pwm1Sm3OutTrig0ToTimer3Trigger);
-    INPUTMUX_AttachSignal(INPUTMUX0,0,kINPUTMUX_Pwm1Sm3OutTrig0ToTimer4Trigger);
-    INPUTMUX_AttachSignal(INPUTMUX0,0,kINPUTMUX_Pwm1Sm3OutTrig0ToTimer0Trigger);
     
     INPUTMUX_AttachSignal(INPUTMUX0, 2U, kINPUTMUX_Cmp1OutToFlexPwm1Fault);
 }
@@ -1733,7 +1733,7 @@ void MCDRV_Init(void)
     InitCTIMER4();
     DMA_EnableAllChannels();
     
-    INPUTMUX_AttachSignal(INPUTMUX0, 0U, kINPUTMUX_Aoi0Out0ToTimer1Trigger);
+    INPUTMUX_AttachSignal(INPUTMUX0, 0U, kINPUTMUX_Aoi0Out0ToTimer4Trigger);
     
     InitUART0();                /* Init UART1 for FreeMASTER */
     

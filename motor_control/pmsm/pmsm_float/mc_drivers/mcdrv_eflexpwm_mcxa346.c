@@ -137,7 +137,7 @@ void MCDRV_eFlexPwm3PhSet_M3(mcdrv_eflexpwm_t *this)
     pCurrentPwm->SM[3].VAL3 = (uint16_t)w16PwmValPhA;  // falling edge value register update, no need to calculate it
 
     /* Phase B - duty cycle calculation */
-    w16ModuloHalf = CTIMER2->MR[kCTIMER_Match_2];
+    w16ModuloHalf = CTIMER0->MR[kCTIMER_Match_2];
     w16PwmValPhB = (w16ModuloHalf * sUABCtemp.f16B) >> 15;
     w16PwmValPhB = w16ModuloHalf-w16PwmValPhB;
     CtimerPwm.kChannel2_Match_0 = w16PwmValPhB/2;
@@ -146,7 +146,7 @@ void MCDRV_eFlexPwm3PhSet_M3(mcdrv_eflexpwm_t *this)
     CtimerPwm.kChannel3_Match_1 = w16ModuloHalf-w16PwmValPhB/2; 
     
     /* Phase C - duty cycle calculation */
-    w16ModuloHalf = CTIMER4->MR[kCTIMER_Match_2];
+    w16ModuloHalf = CTIMER2->MR[kCTIMER_Match_2];
     w16PwmValPhC = (w16ModuloHalf * sUABCtemp.f16C) >> 15;
     w16PwmValPhC = w16ModuloHalf-w16PwmValPhC;    
     CtimerPwm.kChannel4_Match_0 = w16PwmValPhC/2;
@@ -159,14 +159,14 @@ void MCDRV_eFlexPwm3PhSet_M3(mcdrv_eflexpwm_t *this)
 
 void Ctimer_callback(uint32_t flags)
 {
-    CTIMER2->MR[kCTIMER_Match_0] = CtimerPwm.kChannel2_Match_0;
-    CTIMER2->MR[kCTIMER_Match_1] = CtimerPwm.kChannel2_Match_1;
-    CTIMER3->MR[kCTIMER_Match_0] = CtimerPwm.kChannel3_Match_0;
-    CTIMER3->MR[kCTIMER_Match_1] = CtimerPwm.kChannel3_Match_1;
-    CTIMER4->MR[kCTIMER_Match_0] = CtimerPwm.kChannel4_Match_0;
-    CTIMER4->MR[kCTIMER_Match_1] = CtimerPwm.kChannel4_Match_1;
-    CTIMER0->MR[kCTIMER_Match_0] = CtimerPwm.kChannel5_Match_0;
-    CTIMER0->MR[kCTIMER_Match_1] = CtimerPwm.kChannel5_Match_1;
+    CTIMER0->MR[kCTIMER_Match_0] = CtimerPwm.kChannel2_Match_0;
+    CTIMER0->MR[kCTIMER_Match_1] = CtimerPwm.kChannel2_Match_1;
+    CTIMER1->MR[kCTIMER_Match_0] = CtimerPwm.kChannel3_Match_0;
+    CTIMER1->MR[kCTIMER_Match_1] = CtimerPwm.kChannel3_Match_1;
+    CTIMER2->MR[kCTIMER_Match_0] = CtimerPwm.kChannel4_Match_0;
+    CTIMER2->MR[kCTIMER_Match_1] = CtimerPwm.kChannel4_Match_1;
+    CTIMER3->MR[kCTIMER_Match_0] = CtimerPwm.kChannel5_Match_0;
+    CTIMER3->MR[kCTIMER_Match_1] = CtimerPwm.kChannel5_Match_1;
 }
 
 /*!
@@ -222,7 +222,7 @@ void MCDRV_eFlexPwm3PhOutEn_M3(mcdrv_eflexpwm_t *this)
     pCurrentPwm->OUTEN |= PWM_OUTEN_PWMB_EN(0x8);
     
     CTIMER0->TCR |= CTIMER_TCR_ATCEN(1);
-    CTIMER4->TCR |= CTIMER_TCR_ATCEN(1);   
+    CTIMER1->TCR |= CTIMER_TCR_ATCEN(1);
     CTIMER2->TCR |= CTIMER_TCR_ATCEN(1);
     CTIMER3->TCR |= CTIMER_TCR_ATCEN(1);
 
@@ -253,9 +253,9 @@ void MCDRV_eFlexPwm3PhOutDis_M3(mcdrv_eflexpwm_t *this)
     pCurrentPwm->OUTEN &= (~PWM_OUTEN_PWMB_EN(0x8));
  
     CTIMER0->TCR &= ~(CTIMER_TCR_ATCEN_MASK|CTIMER_TCR_CEN_MASK);   
+    CTIMER1->TCR &= ~(CTIMER_TCR_ATCEN_MASK|CTIMER_TCR_CEN_MASK);
     CTIMER2->TCR &= ~(CTIMER_TCR_ATCEN_MASK|CTIMER_TCR_CEN_MASK);    
-    CTIMER3->TCR &= ~(CTIMER_TCR_ATCEN_MASK|CTIMER_TCR_CEN_MASK);    
-    CTIMER4->TCR &= ~(CTIMER_TCR_ATCEN_MASK|CTIMER_TCR_CEN_MASK);
+    CTIMER3->TCR &= ~(CTIMER_TCR_ATCEN_MASK|CTIMER_TCR_CEN_MASK);
     
     GPIO_PinWrite(GPIO3, BOARD_SMARTDMA0PINS_MC3_CT_GPIO_PIN, 0);
     GPIO_PinWrite(GPIO3, BOARD_SMARTDMA0PINS_MC3_CB_GPIO_PIN, 0);

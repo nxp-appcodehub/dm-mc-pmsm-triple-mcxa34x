@@ -530,6 +530,7 @@ void BOARD_BootClockFROHF180M(void)
 
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO_HF_to_CTIMER0);               /* !< Switch CTIMER0 to FRO_LF_DIV */
+    CLOCK_AttachClk(kFRO_HF_to_CTIMER1);
     CLOCK_AttachClk(kFRO_HF_to_CTIMER2);               /* !< Switch CTIMER0 to FRO_LF_DIV */
     CLOCK_AttachClk(kFRO_HF_to_CTIMER3);               /* !< Switch CTIMER0 to FRO_LF_DIV */ 
     CLOCK_AttachClk(kFRO_HF_to_CTIMER4);               /* !< Switch CTIMER0 to FRO_LF_DIV */      
@@ -542,6 +543,7 @@ void BOARD_BootClockFROHF180M(void)
     /*!< Set up dividers */
     CLOCK_SetClockDiv(kCLOCK_DivFRO_LF, 1U);               /* !< Set SYSCON.FROLFDIV divider to value 1 */
     CLOCK_SetClockDiv(kCLOCK_DivCTIMER0, 1U);              /* !< Set MRCC.CTIMER0_CLKDIV divider to value 1 */
+    CLOCK_SetClockDiv(kCLOCK_DivCTIMER1, 1U);
     CLOCK_SetClockDiv(kCLOCK_DivCTIMER2, 1U);              /* !< Set MRCC.CTIMER0_CLKDIV divider to value 1 */
     CLOCK_SetClockDiv(kCLOCK_DivCTIMER3, 1U);              /* !< Set MRCC.CTIMER0_CLKDIV divider to value 1 */
     CLOCK_SetClockDiv(kCLOCK_DivCTIMER4, 1U);              /* !< Set MRCC.CTIMER0_CLKDIV divider to value 1 */
