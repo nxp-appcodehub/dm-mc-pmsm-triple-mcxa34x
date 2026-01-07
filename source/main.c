@@ -193,6 +193,13 @@ void ADC1_IRQHandler(void)
 int cntt=0;
 void LPTMR0_IRQHandler(void)
 {
+	static int isr_cnt = 0;
+
+	if(++isr_cnt==1000)
+	{
+		isr_cnt = 0;
+		GPIO_PortToggle(GPIO2, 1<<25);
+	}
   /* Clear the match interrupt flag. */
     LPTMR_ClearStatusFlags(LPTMR0, kLPTMR_TimerCompareFlag);
 
@@ -225,14 +232,14 @@ void LPTMR0_IRQHandler(void)
     __ISB();
 }
 
-void CTIMER1_IRQHandler(void)
+void CTIMER4_IRQHandler(void)
 {
     /* Clear the match interrupt flag. */
-    CTIMER1->IR |= CTIMER_IR_MR2INT(1U);
+    CTIMER4->IR |= CTIMER_IR_MR2INT(1U);
    
-    CTIMER1->TCR = CTIMER_TCR_CRST_MASK;
-    CTIMER1->TCR = 0;
-    CTIMER1->TCR = CTIMER_TCR_ATCEN_MASK;
+    CTIMER4->TCR = CTIMER_TCR_CRST_MASK;
+    CTIMER4->TCR = 0;
+    CTIMER4->TCR = CTIMER_TCR_ATCEN_MASK;
     
     PFC_isr_cnt++;
     

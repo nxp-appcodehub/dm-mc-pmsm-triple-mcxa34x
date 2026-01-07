@@ -174,7 +174,6 @@ sm_app_ctrl_t g_sM3Ctrl = {
 void SmartDMA_pwm_fault_callback(void *param)
 {
    g_eM3StateRun_causefault = g_eM3StateRun;
-   GPIO2->PSOR |= 1<<25;
     /* Fault:   DC-bus over-current */  
    FAULT_SET(g_sM3Drive.sFaultIdPending, FAULT_I_DCBUS_OVER);
    

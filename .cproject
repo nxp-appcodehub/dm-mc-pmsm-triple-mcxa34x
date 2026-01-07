@@ -1172,7 +1172,7 @@
 	<storageModule moduleId="com.nxp.mcuxpresso.core.datamodels">
 		<sdkName>SDK_2.x_FRDM-MCXA346</sdkName>
 		<sdkExample>frdmmcxa346_led_blinky_peripheral</sdkExample>
-		<sdkVersion>25.09.00</sdkVersion>
+		<sdkVersion>25.12.000</sdkVersion>
 		<sdkComponents>platform.drivers.clock.MCXA346;platform.drivers.inputmux_connections.MCXA346;platform.drivers.reset.MCXA346;CMSIS_Include_core_cm.MCXA346;device.MCXA346_CMSIS.MCXA346;device.MCXA346_system.MCXA346;device.MCXA346_startup.MCXA346;platform.drivers.common.MCXA346;platform.drivers.gpio.MCXA346;platform.drivers.inputmux.MCXA346;platform.drivers.lpuart.MCXA346;platform.drivers.mcx_spc.MCXA346;platform.drivers.port.MCXA346;platform.utilities.assert_lite.MCXA346;platform.utilities.misc_utilities.MCXA346;utility.str.MCXA346;utility.debug_console_lite.MCXA346;component.lpuart_adapter.MCXA346;frdmmcxa346_led_blinky_peripheral;</sdkComponents>
 		<boardId>frdmmcxa346</boardId>
 		<package>MCXA346VLQ</package>
