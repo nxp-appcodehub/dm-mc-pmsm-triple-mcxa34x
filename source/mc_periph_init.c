@@ -30,9 +30,7 @@
  * Typedef
  ******************************************************************************/
 
-/* Array of function pointers for callback for each channel */
-ctimer_callback_t ctimer_callback_table[] = {
-    Ctimer_callback};
+
 /*${prototype:end}*/
 /*******************************************************************************
  * Prototypes
@@ -1082,9 +1080,6 @@ static void DMA_EnableAllChannels(void)
     }
 }
 
-#define CTIMER_VAL0 2000
-#define CTIMER_VAL1 5000
-
 static void InitCTIMER0(void)
 {
     ctimer_config_t config;
@@ -1117,6 +1112,8 @@ static void InitCTIMER0(void)
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
     CTIMER_SetupMatch(CTIMER0, kCTIMER_Match_2, &matchConfig);
+
+    CTIMER0->MCR |= (3<<24);
 }
 
 static void InitCTIMER1(void)
@@ -1152,6 +1149,8 @@ static void InitCTIMER1(void)
     matchConfig.enableInterrupt    = false;
     CTIMER_SetupMatch(CTIMER1, kCTIMER_Match_2, &matchConfig);
 
+    CTIMER1->MCR |= (3<<24);
+
 }
 
 static void InitCTIMER2(void)
@@ -1184,11 +1183,11 @@ static void InitCTIMER2(void)
     matchConfig.matchValue         = CLOCK_GetCTimerClkFreq(2U) / M3_PWM_FREQ - 10;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
-    matchConfig.enableInterrupt    = true;
+    matchConfig.enableInterrupt    = false;
 	
-    /* Create different ctimer_callback_table array for different CTimer instance. */
-    CTIMER_RegisterCallBack(CTIMER2, &ctimer_callback_table[0], kCTIMER_SingleCallback);  
     CTIMER_SetupMatch(CTIMER2, kCTIMER_Match_2, &matchConfig);
+
+    CTIMER2->MCR |= (3<<24);
 }
 
 
@@ -1203,7 +1202,7 @@ static void InitCTIMER3(void)
  //   CTIMER3->TCR |= CTIMER_TCR_ATCEN(1);
     matchConfig.enableCounterReset = false;
     matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 5622;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.matchValue         = 5711;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
@@ -1211,7 +1210,7 @@ static void InitCTIMER3(void)
 
     matchConfig.enableCounterReset = false;
     matchConfig.enableCounterStop  = false;
-    matchConfig.matchValue         = 16957;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
+    matchConfig.matchValue         = 16868;//CLOCK_GetCTimerClkFreq(0U) / M3_PWM_FREQ / 2 - 1;
     matchConfig.outControl         = kCTIMER_Output_NoAction;
     matchConfig.outPinInitState    = true;
     matchConfig.enableInterrupt    = false;
@@ -1225,6 +1224,8 @@ static void InitCTIMER3(void)
     matchConfig.enableInterrupt    = false;
       
     CTIMER_SetupMatch(CTIMER3, kCTIMER_Match_2, &matchConfig);
+
+    CTIMER3->MCR |= (3<<24);
 
 }
 

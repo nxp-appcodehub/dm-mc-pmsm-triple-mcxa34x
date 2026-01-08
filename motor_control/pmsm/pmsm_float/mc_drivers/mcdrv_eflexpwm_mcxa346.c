@@ -13,23 +13,12 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-typedef struct
-{
-    uint32_t kChannel2_Match_0;
-    uint32_t kChannel2_Match_1;
-    uint32_t kChannel3_Match_0;
-    uint32_t kChannel3_Match_1;
-    uint32_t kChannel4_Match_0;
-    uint32_t kChannel4_Match_1;
-    uint32_t kChannel5_Match_0;
-    uint32_t kChannel5_Match_1;    
-}CTIMER_PWM_Type;
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 
 static bool_t s_statusPass;
-CTIMER_PWM_Type CtimerPwm= {0};
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -82,6 +71,7 @@ void MCDRV_eFlexPwm3PhSet(mcdrv_eflexpwm_t *this)
 RAM_FUNC_LIB
 void MCDRV_eFlexPwm3PhSet_M3(mcdrv_eflexpwm_t *this)
 {
+	static int flag = 0;
     PWM_Type * const pCurrentPwm = this->pui32PwmBaseAddress;
 
     GMCLIB_3COOR_T_F16 sUABCtemp;
@@ -140,33 +130,22 @@ void MCDRV_eFlexPwm3PhSet_M3(mcdrv_eflexpwm_t *this)
     w16ModuloHalf = CTIMER0->MR[kCTIMER_Match_2];
     w16PwmValPhB = (w16ModuloHalf * sUABCtemp.f16B) >> 15;
     w16PwmValPhB = w16ModuloHalf-w16PwmValPhB;
-    CtimerPwm.kChannel2_Match_0 = w16PwmValPhB/2;
-    CtimerPwm.kChannel2_Match_1 = w16ModuloHalf-w16PwmValPhB/2+w16DeadVal;
-    CtimerPwm.kChannel3_Match_0 = w16PwmValPhB/2+w16DeadVal;     
-    CtimerPwm.kChannel3_Match_1 = w16ModuloHalf-w16PwmValPhB/2; 
-    
+    CTIMER0->MSR[kCTIMER_Match_0] = w16PwmValPhB/2;
+    CTIMER0->MSR[kCTIMER_Match_1] = w16ModuloHalf-w16PwmValPhB/2+w16DeadVal;
+    CTIMER1->MSR[kCTIMER_Match_0] = w16PwmValPhB/2+w16DeadVal;
+    CTIMER1->MSR[kCTIMER_Match_1] = w16ModuloHalf-w16PwmValPhB/2;
+
     /* Phase C - duty cycle calculation */
     w16ModuloHalf = CTIMER2->MR[kCTIMER_Match_2];
     w16PwmValPhC = (w16ModuloHalf * sUABCtemp.f16C) >> 15;
-    w16PwmValPhC = w16ModuloHalf-w16PwmValPhC;    
-    CtimerPwm.kChannel4_Match_0 = w16PwmValPhC/2;
-    CtimerPwm.kChannel4_Match_1 = w16ModuloHalf-w16PwmValPhC/2+w16DeadVal;
-    CtimerPwm.kChannel5_Match_0 = w16PwmValPhC/2+w16DeadVal;    
-    CtimerPwm.kChannel5_Match_1 = w16ModuloHalf-w16PwmValPhC/2; 
+    w16PwmValPhC = w16ModuloHalf-w16PwmValPhC;
+    CTIMER2->MSR[kCTIMER_Match_0] = w16PwmValPhC/2;
+    CTIMER2->MSR[kCTIMER_Match_1] = w16ModuloHalf-w16PwmValPhC/2+w16DeadVal;
+    CTIMER3->MSR[kCTIMER_Match_0] = w16PwmValPhC/2+w16DeadVal;
+    CTIMER3->MSR[kCTIMER_Match_1] = w16ModuloHalf-w16PwmValPhC/2;
+
     
     pCurrentPwm->MCTRL |= PWM_MCTRL_LDOK(8);
-}
-
-void Ctimer_callback(uint32_t flags)
-{
-    CTIMER0->MR[kCTIMER_Match_0] = CtimerPwm.kChannel2_Match_0;
-    CTIMER0->MR[kCTIMER_Match_1] = CtimerPwm.kChannel2_Match_1;
-    CTIMER1->MR[kCTIMER_Match_0] = CtimerPwm.kChannel3_Match_0;
-    CTIMER1->MR[kCTIMER_Match_1] = CtimerPwm.kChannel3_Match_1;
-    CTIMER2->MR[kCTIMER_Match_0] = CtimerPwm.kChannel4_Match_0;
-    CTIMER2->MR[kCTIMER_Match_1] = CtimerPwm.kChannel4_Match_1;
-    CTIMER3->MR[kCTIMER_Match_0] = CtimerPwm.kChannel5_Match_0;
-    CTIMER3->MR[kCTIMER_Match_1] = CtimerPwm.kChannel5_Match_1;
 }
 
 /*!
