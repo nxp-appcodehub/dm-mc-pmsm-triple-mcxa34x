@@ -1,7 +1,7 @@
 # NXP Application Code Hub
 [<img src="https://mcuxpresso.nxp.com/static/icon/nxp-logo-color.svg" width="100"/>](https://www.nxp.com)
 
-## 3-Phase PMSM Control and PFC Solution using MCX A34x
+## MCX A34x Triple-Motor and Interleaved PFC Control using an HVP Board
 
 
 This demo describes the implementation of sensorless triple motor FOC on NXP MCXA346 MCU. Please refer to [AN14805](https://docs.nxp.com/bundle/AN14717/page/topics/introduction.html) for complete instructions on how to use this software. 
