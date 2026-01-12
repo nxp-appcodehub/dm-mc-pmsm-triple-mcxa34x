@@ -4,7 +4,7 @@
 ## MCX A34x Triple-Motor and Interleaved PFC Control using an HVP Board
 
 
-This demo describes the implementation of sensorless triple motor FOC on NXP MCXA346 MCU. Please refer to [AN14805](https://docs.nxp.com/bundle/AN14717/page/topics/introduction.html) for complete instructions on how to use this software. 
+This demo describes the implementation of sensorless triple motor FOC on NXP MCXA346 MCU. Please refer to [AN14805](https://docs.nxp.com/bundle/AN14805/page/topics/introduction.html) for complete instructions on how to use this software. 
 
 
 #### Boards: X-MCXA346-3MC, dual-motor adapter board
